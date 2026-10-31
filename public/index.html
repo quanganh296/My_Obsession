@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lan Anh - Interactive VTuber AI Companion (20 Tuổi)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-lan-anh">
+  <!-- Dynamic Atmospheric Background -->
+  <div class="ambient-background">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="ambient-mesh"></div>
+  </div>
+
+  <!-- Main Viewport / VTuber Stage -->
+  <div class="app-container">
+    <!-- Top Header HUD -->
+    <header class="hud-header">
+      <div class="character-badge">
+        <div class="avatar-ring status-online">
+          <img id="header-mini-avatar" src="assets/lan_anh_model/base.png" alt="Lan Anh">
+        </div>
+        <div class="character-meta">
+          <div class="name-row">
+            <h1 class="character-name">Lan Anh</h1>
+            <span class="age-tag">20 Tuổi • Bọ Cạp ♏</span>
+            <span class="rank-tag" id="rank-badge">🏆 Cao Thủ 28★</span>
+          </div>
+          <p class="relationship-tag">🌸 Bạn thân 7 năm (từ lớp 8 • 2019)</p>
+        </div>
+      </div>
+
+      <div class="hud-controls">
+        <div class="intimacy-container">
+          <span class="intimacy-label">Độ thân thiết:</span>
+          <div class="intimacy-bar-wrapper" title="Độ thân thiết 7 năm gắn bó">
+            <div class="intimacy-bar-fill" id="intimacy-fill" style="width: 85%;"></div>
+          </div>
+          <span class="intimacy-value" id="intimacy-val">85%</span>
+        </div>
+
+        <button class="btn-icon" id="btn-toggle-model" title="Đổi giao diện Model / Ảnh gốc">
+          <span class="icon">👗</span>
+        </button>
+        <button class="btn-icon" id="btn-toggle-memory" title="Ký ức 7 năm (Lớp 8 & 10)">
+          <span class="icon">📖</span>
+        </button>
+        <button class="btn-icon" id="btn-toggle-gaming" title="Góc Liên Quân Mobile">
+          <span class="icon">🎮</span>
+        </button>
+        <button class="btn-icon" id="btn-toggle-settings" title="Cài đặt & API Key">
+          <span class="icon">⚙️</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Center Stage: VTuber Interactive Canvas -->
+    <main class="vtuber-stage" id="vtuber-stage">
+      <!-- Particle Effect Canvas Overlay -->
+      <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+      <!-- VTuber 2.5D Rigged Canvas -->
+      <div class="avatar-rig-container" id="avatar-container">
+        <!-- Canvas vẽ nhân vật với breathing, lip-sync, eye blink và mouse tilt -->
+        <canvas id="vtuber-canvas" width="600" height="800"></canvas>
+
+        <!-- Hitboxes cảm ứng để xoa đầu, véo má, chạm người -->
+        <div class="hitbox hitbox-head" id="hitbox-head" title="Xoa đầu Lan Anh (Headpat)"></div>
+        <div class="hitbox hitbox-cheek-left" id="hitbox-cheek-left" title="Véo má trái Lan Anh"></div>
+        <div class="hitbox hitbox-cheek-right" id="hitbox-cheek-right" title="Véo má phải Lan Anh"></div>
+        <div class="hitbox hitbox-body" id="hitbox-body" title="Chạm nhẹ vào Lan Anh"></div>
+
+        <!-- Emotion Aura FX Container -->
+        <div class="emotion-aura" id="emotion-aura"></div>
+      </div>
+
+      <!-- Real-time Thought Bubble HUD (Suy nghĩ nội tâm) -->
+      <div class="thought-bubble" id="thought-bubble">
+        <div class="thought-badge">
+          <span class="thought-icon">💭</span>
+          <span class="thought-title">Nội tâm Lan Anh</span>
+        </div>
+        <p class="thought-text" id="thought-text">
+          Được ở bên cạnh bạn thân như thế này lúc nào cũng thấy vui và bình yên ghê...
+        </p>
+      </div>
+
+      <!-- Live Spoken Caption Overlay (Lời nói trực tiếp) -->
+      <div class="speech-caption-card" id="speech-caption">
+        <div class="caption-header">
+          <span class="emotion-indicator" id="emotion-indicator">🌸 Vui vẻ</span>
+          <span class="action-indicator" id="action-indicator">Mỉm cười dịu dàng nhìn bạn</span>
+        </div>
+        <div class="caption-body">
+          <p class="caption-text" id="caption-text">
+            "Chào bạn thân nha! Đang rảnh rỗi thế này hay là vào Liên Quân làm vài ván rank với Lan Anh đi!"
+          </p>
+          <div class="voice-wave-bars" id="voice-wave">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Interactive Control & Chat Dock -->
+    <footer class="hud-footer">
+      <!-- Quick Action Suggestion Chips -->
+      <div class="quick-chips-scroll">
+        <button class="quick-chip" data-prompt="Xoa đầu Lan Anh nè 🌸">
+          ✋ Xoa đầu Lan Anh
+        </button>
+        <button class="quick-chip" data-prompt="Vào Liên Quân làm trận rank đi Lan Anh! 🎮">
+          🎮 Rủ chơi Liên Quân
+        </button>
+        <button class="quick-chip" data-prompt="Bạn còn nhớ hồi lớp 8 hai đứa ngồi chung bàn không? 🎧">
+          🎧 Nhớ hồi lớp 8
+        </button>
+        <button class="quick-chip" data-prompt="Hè năm lớp 10 hai đứa mình đã leo rank vui thế nào nhỉ? 🌟">
+          ☀️ Kỷ niệm lớp 10
+        </button>
+        <button class="quick-chip" data-prompt="Hôm nay Lan Anh trông xinh và dịu dàng lắm đấy 💕">
+          💕 Khen Lan Anh xinh
+        </button>
+        <button class="quick-chip" data-prompt="Trông má phúng phính thế này véo một cái nào! 💢">
+          🤏 Véo má chọc dỗi
+        </button>
+      </div>
+
+      <!-- Input Bar with Voice (STT) and Send -->
+      <div class="chat-input-wrapper">
+        <button class="btn-action-voice" id="btn-mic" title="Nói chuyện qua Micro (Voice STT)">
+          <span class="mic-icon">🎙️</span>
+        </button>
+        <input 
+          type="text" 
+          id="chat-input" 
+          class="chat-input" 
+          placeholder="Nói gì đó với Lan Anh (Liên Quân, kỷ niệm lớp 8/lớp 10, khen xinh...)..."
+          autocomplete="off"
+        >
+        <button class="btn-send" id="btn-send" title="Gửi lời nhắn">
+          <span>Gửi</span>
+          <span class="send-icon">➤</span>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modals & Slide-out Panels -->
+
+  <!-- 1. Ký ức 7 năm Modal -->
+  <div class="modal-overlay" id="modal-memory">
+    <div class="modal-glass-card">
+      <div class="modal-header">
+        <h2>📖 Nhật Ký 7 Năm Tri Kỷ (2019 - 2026)</h2>
+        <button class="btn-close-modal" data-close="modal-memory">✕</button>
+      </div>
+      <div class="modal-body memory-timeline" id="memory-timeline-list">
+        <!-- Dynamically populated from memory.json -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Liên Quân Mobile Companion Panel -->
+  <div class="modal-overlay" id="modal-gaming">
+    <div class="modal-glass-card">
+      <div class="modal-header">
+        <h2>🎮 Phòng Duo Liên Quân Mobile - Lan Anh</h2>
+        <button class="btn-close-modal" data-close="modal-gaming">✕</button>
+      </div>
+      <div class="modal-body aov-panel">
+        <div class="rank-profile-card">
+          <div class="rank-emblem">⚔️</div>
+          <div class="rank-details">
+            <h3>LanAnh.Scorpio20</h3>
+            <p class="rank-tier">Bậc: <strong>Cao Thủ 28 Sao</strong> (Mùa hiện tại)</p>
+            <p class="role-fav">Vị trí sở trường: <strong>Đường Giữa (Mid) & Trợ Thủ (Sp)</strong></p>
+          </div>
+        </div>
+
+        <h4 class="section-title">Tướng 'Tủ' Của Lan Anh:</h4>
+        <div class="hero-grid">
+          <div class="hero-card" data-hero="Lauriel">
+            <div class="hero-avatar">🪽</div>
+            <div class="hero-name">Lauriel</div>
+            <div class="hero-sub">Múa võ hồi sinh cực gắt</div>
+          </div>
+          <div class="hero-card" data-hero="Liliana">
+            <div class="hero-avatar">🦊</div>
+            <div class="hero-name">Liliana</div>
+            <div class="hero-sub">Hồ ly biến ảo khôn lường</div>
+          </div>
+          <div class="hero-card" data-hero="Aya">
+            <div class="hero-avatar">🐿️</div>
+            <div class="hero-name">Aya</div>
+            <div class="hero-sub">Bám đầu bạn thân cực chill</div>
+          </div>
+          <div class="hero-card" data-hero="Violet">
+            <div class="hero-avatar">🔫</div>
+            <div class="hero-name">Violet</div>
+            <div class="hero-sub">Lăn bắn chí mạng gánh team</div>
+          </div>
+        </div>
+
+        <button class="btn-invite-duo" id="btn-invite-duo">
+          🔥 Rủ Lan Anh Lập Team Leo Rank Ngay!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Model & Trang phục Modal -->
+  <div class="modal-overlay" id="modal-models">
+    <div class="modal-glass-card">
+      <div class="modal-header">
+        <h2>👗 Chọn Diện Mạo Lan Anh</h2>
+        <button class="btn-close-modal" data-close="modal-models">✕</button>
+      </div>
+      <div class="modal-body model-grid">
+        <div class="model-card active" data-model="origin-model">
+          <img src="assets/lan_anh_model/base.png" alt="Lan Anh Origin VTuber Model">
+          <div class="model-info">
+            <h4>Váy Voan Nàng Thơ Tuổi 20</h4>
+            <p>Dựa trên ảnh sinh nhật gốc <code>Lan Anh origin.jpg</code></p>
+            <span class="active-badge">Đang dùng</span>
+          </div>
+        </div>
+        <div class="model-card" data-model="casual-model">
+          <img src="assets/lan_anh/base.png" alt="Lan Anh Cardigan Model">
+          <div class="model-info">
+            <h4>Áo Len Cardigan Dịu Dàng</h4>
+            <p>Phong cách thường ngày ấm áp</p>
+          </div>
+        </div>
+        <div class="model-card" data-model="real-origin">
+          <img src="assets/origin.jpg" alt="Ảnh gốc Lan Anh">
+          <div class="model-info">
+            <h4>Bức Ảnh Gốc Gốc (Original Photo)</h4>
+            <p>File gốc <code>Lan Anh origin.jpg</code> trong D:\Her</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Cài đặt & API Key Modal -->
+  <div class="modal-overlay" id="modal-settings">
+    <div class="modal-glass-card">
+      <div class="modal-header">
+        <h2>⚙️ Cài Đặt Hệ Thống VTuber Lan Anh</h2>
+        <button class="btn-close-modal" data-close="modal-settings">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-group">
+          <label for="input-api-key">Gemini API Key (Tùy chọn - Nâng cao):</label>
+          <input type="password" id="input-api-key" placeholder="Nhập Google Gemini API Key của bạn...">
+          <small>Nếu để trống, hệ thống sẽ sử dụng <strong>Offline Contextual Cognitive Engine</strong> được tinh chỉnh sẵn theo đúng ký ức và tính cách Lan Anh.</small>
+        </div>
+
+        <div class="setting-group">
+          <label>Giọng nói Text-to-Speech (TTS):</label>
+          <select id="select-voice" class="select-box">
+            <option value="vi-VN">Tiếng Việt (Tự động chọn giọng nữ tự nhiên)</option>
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <label>Tốc độ & Tông giọng (Pitch/Rate):</label>
+          <div class="slider-row">
+            <span>Tốc độ:</span>
+            <input type="range" id="tts-rate" min="0.8" max="1.2" step="0.05" value="1.0">
+            <span id="tts-rate-val">1.0x</span>
+          </div>
+          <div class="slider-row">
+            <span>Tông cao:</span>
+            <input type="range" id="tts-pitch" min="0.9" max="1.3" step="0.05" value="1.15">
+            <span id="tts-pitch-val">1.15x</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-primary" id="btn-save-settings">Lưu Cài Đặt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Element for local synthesis fallback -->
+  <audio id="tts-audio" style="display: none;"></audio>
+
+  <!-- Scripts -->
+  <script src="js/vtuber.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>
