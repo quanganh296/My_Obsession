@@ -4,6 +4,13 @@ venv/
 .venv/
 env/
 
+# Binaries & Tooling
+bin/
+*.exe
+
+# Local Tunnel URLs
+public_url.txt
+
 # Caches & Temporary Directories
 .npm-cache/
 .pip-cache/

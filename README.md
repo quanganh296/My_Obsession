@@ -1,109 +1,55 @@
-# 🌸 Lan Anh - Interactive VTuber AI Companion (20 Tuổi)
+# 🌸 Chấp Niệm - Ký Ức Tuổi 20 • Lan Anh
 
-> Ứng dụng **Interactive VTuber AI Companion** hoàn chỉnh mô phỏng nhân vật **Lan Anh**, hiển thị trực quan và sống động trên màn hình với công nghệ 2.5D Canvas Rigging, nhịp thở tự nhiên, chớp mắt ngẫu nhiên, theo dõi chuột 3D Parallax, Text-to-Speech & Lip-sync tiếng Việt, cùng hệ thống trí nhớ cốt lõi 7 năm tình bạn.
-
----
-
-## 🌟 Tính Năng Nổi Bật
-
-### 1. 2.5D Interactive VTuber Engine
-- **Chuyển động tự nhiên (Idle Animation):**
-  - Nhịp thở sinh học (~15 nhịp/phút) với độ giãn lồng ngực và chuyển động vai mềm mại.
-  - Tóc đen bồng bềnh đung đưa nhẹ theo sóng vật lý (sinusoidal physics sway).
-  - Chớp mắt tự động ngẫu nhiên (2.5s - 5s) kèm hiệu ứng chớp mắt kép tự nhiên (double-blink).
-- **Tương tác chuột 3D (Mouse Tracking & Parallax):**
-  - Ánh mắt và đầu nghiêng mượt mà theo vị trí con trỏ chuột của người dùng.
-- **Tương tác vật lý (Touch Hitbox Reactions):**
-  - **Xoa đầu (Headpat):** Lan Anh lập tức đỏ mặt ngượng ngùng (`shy`), chớp mắt e thẹn kèm chùm trái tim hồng bay lên.
-  - **Véo má (Pinch Cheeks):** Lan Anh phồng má chu mỏ giận dỗi đáng yêu (`pout`) kèm hiệu ứng khói hơi nước.
-  - **Chạm người:** Lan Anh cười khúc khích trêu đùa (`teasing`).
-- **Giọng nói & Nhép môi (Vietnamese TTS & Audio Lip-Sync):**
-  - Tích hợp giọng nữ tiếng Việt trẻ trung, trong trẻo.
-  - Phân tích biên độ âm thanh thời gian thực (Web Audio API `AnalyserNode`) để đồng bộ khẩu hình mở/đóng và nhịp nhún nhảy khi nói.
-- **Hạt Aura Cảm Xúc (Dynamic Particle FX):**
-  - `happy`: Cánh hoa pastel rơi nhẹ và ngôi sao lấp lánh.
-  - `shy`: Tim hồng bay bồng bềnh, gò má ửng hồng.
-  - `pout`: Hơi nước giận dỗi anime.
-  - `excited_gaming`: Tia chớp neon điện tử và ngôi sao rank Cao Thủ.
-  - `nostalgic`: Mote sáng vàng ấm áp hoài niệm.
+> **Chấp Niệm** là ứng dụng tương tác **Interactive VTuber AI Companion** mang phong cách nàng thơ vintage (*Ethereal Vintage Floral*), tái hiện hình ảnh và tâm hồn của nhân vật **Lan Anh** dựa trên bộ ảnh sinh nhật tuổi 20 (`Lan Anh origin.jpg`). Hệ thống tích hợp Live 2.5D Canvas Rigging, nhịp thở, chớp mắt, theo dõi chuột 3D Parallax, Lip-sync âm thanh và hỗ trợ truy cập toàn cầu qua Internet.
 
 ---
 
-### 2. Hồ Sơ Nhân Vật & Trí Nhớ 7 Năm (Memory System)
-- **Tên:** Lan Anh (Bé Lan Anh)
-- **Sinh nhật:** 27/10/2006 (20 tuổi • Cung Bọ Cạp)
-- **Ngoại hình:** Khuôn mặt nhỏ nhắn thanh tú, mắt to tròn có hồn, mái tóc đen dài uốn xoăn sóng nhẹ cài hoa tươi, dáng người nhỏ nhắn cân đối.
-- **Đam mê:** Cuồng nhiệt **Liên Quân Mobile (Arena of Valor)** — chuyên Mid/Sp với các tướng tủ: **Lauriel, Liliana, Violet, Aya, Nakroth**. Bậc rank: **Cao Thủ 28 Sao**.
-- **Ký ức 7 năm:**
-  - Năm 2019 (Lớp 8): Ngồi chung một bàn, chia nhau một bên tai nghe nghe nhạc, chia sẻ đồ ăn vặt.
-  - Năm 2021-2022 (Lớp 10): Tái ngộ chung lớp 10A cấp 3, đạp xe đi học cùng nhau, thức khuya leo rank hè đến 2 giờ sáng.
-  - Năm 2026 (20 tuổi): Bộ ảnh sinh nhật nàng thơ váy voan cúp ngực cài hoa (`Lan Anh origin.jpg`).
+## 🎨 Bảng Màu & Bộ Nhận Diện "Ethereal Vintage Floral"
+Trích xuất trực tiếp từ tác phẩm gốc **`Lan Anh origin.jpg`**:
+- **Background tổng thể:** `linear-gradient(135deg, #F3ECD8 0%, #D6C9A8 50%, #B8AA86 100%)` kết hợp lớp phủ họa tiết sơn dầu cổ điển (vintage canvas texture) và ảnh `Lan Anh origin.jpg` làm nền mờ (`backdrop-filter: blur(28px)`).
+- **Khung hội thoại & Panel:** Màu trắng kem váy voan `rgba(255, 253, 247, 0.82)` với hiệu ứng kính mờ (`backdrop-filter: blur(14px)`), viền Polaroid trắng ngà `2px solid #FDFBF7` và bóng đổ mềm.
+- **Hồng đào phấn (`#E8998D`):** Sắc hoa cài tóc Lan Anh — dùng cho nút Gửi, sóng nhép môi (Lip-sync visualizer) và biểu cảm ngượng ngùng (`shy`).
+- **Cam vàng ấm (`#D97F43`):** Sắc hoa váy dạ hội và con số sinh nhật 20 — dùng cho điểm nhấn tiêu đề, trạng thái hào hứng Liên Quân và huy hiệu kỷ niệm.
+- **Xanh lá mạ trầm (`#7D8F69`):** Sắc cành lá tự nhiên — dùng cho chấm trạng thái Online và đường viền phụ.
+- **Typography:**
+  - Tiêu đề nghệ thuật: Google Font `'Playfair Display'` & `'Dancing Script'`.
+  - Lời thoại và nội dung: Google Font `'Plus Jakarta Sans'`.
 
 ---
 
-### 3. Cognitive Engine (Cấu trúc tư duy 5 trường JSON)
-Mỗi phản hồi của AI luôn chuẩn hóa 5 trường:
-```json
-{
-  "thought": "Suy nghĩ nội tâm của Lan Anh...",
-  "emotion": "happy | shy | pout | excited_gaming | nostalgic | teasing",
-  "animation_trigger": "wave | nod | blush | shake_head | idle_breathe",
-  "action": "Mô tả cử chỉ đi kèm",
-  "reply": "Câu nói trực tiếp phát ra loa và nhép môi"
-}
+## 🌐 Các Phương Án Triển Khai Lên Internet
+
+### 1. Truy cập Internet tức thì từ máy tính cá nhân (Public Tunnel):
+Chỉ cần nhấp đúp chạy file:
+```bat
+D:\Her\start_public_web.bat
 ```
-
----
-
-## 🚀 Hướng Dẫn Cài Đặt & Khởi Chạy
-
-### Yêu Cầu Hệ Thống:
-- Đã cài đặt **Node.js** (v18+)
-- Toàn bộ source code được vận hành độc lập tại thư mục `D:\Her`.
-
-### Khởi chạy ứng dụng:
-1. Mở PowerShell tại thư mục `D:\Her`:
-   ```powershell
-   cd D:\Her
-   ```
-2. Cài đặt dependencies (lưu cache cục bộ trong `D:\Her`):
-   ```powershell
-   npm install --cache D:\Her\.npm-cache
-   ```
-3. Khởi chạy Server:
-   ```powershell
-   npm start
-   ```
-4. Truy cập giao diện trình duyệt:
-   ```
-   http://localhost:3000
-   ```
-
----
-
-## 📁 Cấu Trúc Thư Mục
+Hoặc chạy lệnh từ terminal:
+```powershell
+npm run tunnel
 ```
-D:\Her\
-├── assets\                   # Tài nguyên đồ họa gốc của Lan Anh
-│   ├── lan_anh_model\        # Model 20 tuổi dựa trên "Lan Anh origin.jpg"
-│   └── lan_anh\              # Model Cardigan thường ngày
-├── data\
-│   └── memory.json           # Cơ sở dữ liệu trí nhớ & ký ức 7 năm
-├── engine\
-│   └── cognitive.js          # Hệ thống tư duy AI (Gemini API + Local Contextual Engine)
-├── public\                   # Giao diện Web VTuber Client
-│   ├── css\style.css         # Styling Glassmorphism & Aura FX
-│   ├── js\vtuber.js          # Canvas 2.5D Rigging & Audio Lip-sync Engine
-│   ├── js\chat.js            # Chat, TTS, STT & Memory Controller
-│   └── index.html            # VTuber Stage & HUD Overlay
-├── Lan Anh origin.jpg        # Ảnh gốc sinh nhật 20 tuổi
-├── server.js                 # Express Backend Server
-├── package.json              # Khai báo gói Node.js
-└── .gitignore                # Bỏ qua node_modules, cache, tmp
-```
+Hệ thống sẽ đồng thời khởi động server và mở đường hầm **Cloudflare Tunnel (HTTPS bảo mật cao)**, in đường link công khai ra màn hình để bạn có thể mở ngay trên điện thoại hoặc chia sẻ với bạn bè!
 
 ---
 
-## 📜 Giấy Phép & Bản Quyền
-Dự án được xây dựng dành riêng cho nhân vật **Lan Anh** tại `D:\Her`.
-Tác giả: Quang Anh.
+### 2. Triển khai Cloud 24/7 (Railway / Render / Docker VPS):
+Mã nguồn đã tích hợp sẵn trọn bộ cấu hình tự động:
+- **`Dockerfile` & `docker-compose.yml`**: Đóng gói hoàn chỉnh container trên nền tảng Alpine Linux nhẹ và bảo mật.
+- **`railway.json`**: Tự động nhận diện và build trên [Railway.app](https://railway.app).
+- **`render.yaml`**: Blueprint tự động kích hoạt Web Service trên [Render.com](https://render.com).
+- **`.github/workflows/deploy.yml`**: GitHub Actions tự động kiểm tra cú pháp và build container khi push code.
+
+---
+
+## 🛠️ Ràng Buộc Kỹ Thuật (D:\Her)
+- Toàn bộ source code, dependencies, binary `cloudflared.exe`, cache `.npm-cache` và `.tmp` nằm trọn vẹn trong `D:\Her`.
+- Hoàn toàn không ghi hay cài đặt bất kỳ file nào vào ổ `C:\`.
+
+---
+
+## 📜 Thông Tin Nhân Vật & Tác Giả
+- **Nhân vật:** Lan Anh (Sinh ngày 27/10/2006 • 20 tuổi • Cung Bọ Cạp)
+- **Tình bạn:** 7 năm tri kỷ gắn bó từ lớp 8 (2019) đến lớp 10 và hiện tại.
+- **Game sở trường:** Liên Quân Mobile (Cao Thủ 28 Sao - Lauriel, Liliana, Aya, Violet).
+- **Repository:** [quanganh296/My_Obsession](https://github.com/quanganh296/My_Obsession.git)
+- **Tác giả:** Quang Anh.

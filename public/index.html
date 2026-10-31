@@ -2,37 +2,72 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lan Anh - Interactive VTuber AI Companion (20 Tuổi)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chấp Niệm - Ký ức tuổi 20 • Lan Anh</title>
+  
+  <!-- Favicon / Web Icon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+
+  <!-- OpenGraph Metadata -->
+  <meta property="og:title" content="Chấp Niệm - Ký ức tuổi 20 • Lan Anh">
+  <meta property="og:description" content="Không gian tương tác VTuber AI Companion cùng Lan Anh - Người bạn thân 7 năm từ thuở niên thiếu đến tuổi 20 rạng rỡ.">
+  <meta property="og:image" content="assets/origin.jpg">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#D6C9A8">
+
+  <!-- Google Fonts: Playfair Display + Plus Jakarta Sans + Dancing Script -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="theme-lan-anh">
-  <!-- Dynamic Atmospheric Background -->
-  <div class="ambient-background">
-    <div class="glow-orb orb-1"></div>
-    <div class="glow-orb orb-2"></div>
-    <div class="glow-orb orb-3"></div>
-    <div class="ambient-mesh"></div>
+<body class="theme-chap-niem">
+  <!-- Ethereal Vintage Backdrop Overlay with Lan Anh Origin Photo Blur -->
+  <div class="vintage-backdrop">
+    <div class="vintage-photo-blur"></div>
+    <div class="vintage-canvas-texture"></div>
+    <div class="golden-ambient-light light-1"></div>
+    <div class="golden-ambient-light light-2"></div>
   </div>
 
-  <!-- Main Viewport / VTuber Stage -->
+  <!-- Welcome Gate / Màn Hình Chào Mừng Thơ Mộng (Bảo vệ riêng tư & Kích hoạt âm thanh) -->
+  <div class="welcome-gate-overlay" id="welcome-gate">
+    <div class="welcome-card polaroid-frame">
+      <div class="welcome-photo-wrapper">
+        <img src="assets/lan_anh_model/base.png" alt="Lan Anh 20 tuổi" class="welcome-photo">
+        <div class="welcome-photo-glow"></div>
+      </div>
+      <div class="welcome-content">
+        <span class="welcome-badge">Ký ức tuổi 20 • 27/10/2006</span>
+        <h1 class="welcome-title">Chấp Niệm</h1>
+        <p class="welcome-subtitle">Có những ký ức tuổi 20 đọng lại thành chấp niệm đẹp đẽ nhất của một thời thanh xuân gắn bó.</p>
+        <p class="welcome-friendship">🌸 Tri kỷ 7 năm • Lớp 8 & Lớp 10 • Liên Quân Mobile</p>
+        <button class="btn-enter-gate" id="btn-enter-gate">
+          <span>Bước vào không gian Lan Anh</span>
+          <span class="enter-icon">✨</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Viewport / Chấp Niệm Stage -->
   <div class="app-container">
     <!-- Top Header HUD -->
-    <header class="hud-header">
-      <div class="character-badge">
+    <header class="hud-header polaroid-card">
+      <div class="brand-badge">
         <div class="avatar-ring status-online">
-          <img id="header-mini-avatar" src="assets/lan_anh_model/base.png" alt="Lan Anh">
+          <img id="header-mini-avatar" src="favicon.png" alt="Lan Anh">
         </div>
-        <div class="character-meta">
-          <div class="name-row">
-            <h1 class="character-name">Lan Anh</h1>
-            <span class="age-tag">20 Tuổi • Bọ Cạp ♏</span>
-            <span class="rank-tag" id="rank-badge">🏆 Cao Thủ 28★</span>
+        <div class="brand-meta">
+          <div class="title-row">
+            <h1 class="brand-title">Chấp Niệm</h1>
+            <span class="character-name-sub">Lan Anh (20 Tuổi)</span>
+            <span class="zodiac-badge">Bọ Cạp ♏</span>
+            <span class="rank-badge" id="rank-badge">🏆 Cao Thủ 28★</span>
           </div>
-          <p class="relationship-tag">🌸 Bạn thân 7 năm (từ lớp 8 • 2019)</p>
+          <p class="brand-quote">"Ký ức tuổi 20 — 7 năm đồng hành từ bàn học lớp 8 đến nay"</p>
         </div>
       </div>
 
@@ -45,10 +80,10 @@
           <span class="intimacy-value" id="intimacy-val">85%</span>
         </div>
 
-        <button class="btn-icon" id="btn-toggle-model" title="Đổi giao diện Model / Ảnh gốc">
+        <button class="btn-icon" id="btn-toggle-model" title="Diện mạo & Bộ ảnh gốc">
           <span class="icon">👗</span>
         </button>
-        <button class="btn-icon" id="btn-toggle-memory" title="Ký ức 7 năm (Lớp 8 & 10)">
+        <button class="btn-icon" id="btn-toggle-memory" title="Nhật ký 7 năm (Lớp 8 & 10)">
           <span class="icon">📖</span>
         </button>
         <button class="btn-icon" id="btn-toggle-gaming" title="Góc Liên Quân Mobile">
@@ -62,12 +97,12 @@
 
     <!-- Center Stage: VTuber Interactive Canvas -->
     <main class="vtuber-stage" id="vtuber-stage">
-      <!-- Particle Effect Canvas Overlay -->
+      <!-- Ambient Floral Particles Canvas -->
       <canvas id="particle-canvas" class="particle-canvas"></canvas>
 
-      <!-- VTuber 2.5D Rigged Canvas -->
-      <div class="avatar-rig-container" id="avatar-container">
-        <!-- Canvas vẽ nhân vật với breathing, lip-sync, eye blink và mouse tilt -->
+      <!-- VTuber 2.5D Rigged Canvas Frame -->
+      <div class="avatar-rig-container golden-glow-frame" id="avatar-container">
+        <!-- Canvas render nhân vật với breathing, lip-sync, eye blink và mouse tilt -->
         <canvas id="vtuber-canvas" width="600" height="800"></canvas>
 
         <!-- Hitboxes cảm ứng để xoa đầu, véo má, chạm người -->
@@ -76,12 +111,12 @@
         <div class="hitbox hitbox-cheek-right" id="hitbox-cheek-right" title="Véo má phải Lan Anh"></div>
         <div class="hitbox hitbox-body" id="hitbox-body" title="Chạm nhẹ vào Lan Anh"></div>
 
-        <!-- Emotion Aura FX Container -->
+        <!-- Emotion Aura Container -->
         <div class="emotion-aura" id="emotion-aura"></div>
       </div>
 
       <!-- Real-time Thought Bubble HUD (Suy nghĩ nội tâm) -->
-      <div class="thought-bubble" id="thought-bubble">
+      <div class="thought-bubble polaroid-card" id="thought-bubble">
         <div class="thought-badge">
           <span class="thought-icon">💭</span>
           <span class="thought-title">Nội tâm Lan Anh</span>
@@ -92,14 +127,14 @@
       </div>
 
       <!-- Live Spoken Caption Overlay (Lời nói trực tiếp) -->
-      <div class="speech-caption-card" id="speech-caption">
+      <div class="speech-caption-card polaroid-card" id="speech-caption">
         <div class="caption-header">
-          <span class="emotion-indicator" id="emotion-indicator">🌸 Vui vẻ</span>
-          <span class="action-indicator" id="action-indicator">Mỉm cười dịu dàng nhìn bạn</span>
+          <span class="emotion-indicator" id="emotion-indicator">🌸 Dịu dàng, vui vẻ</span>
+          <span class="action-indicator" id="action-indicator">Mỉm cười ấm áp nhìn bạn</span>
         </div>
         <div class="caption-body">
           <p class="caption-text" id="caption-text">
-            "Chào bạn thân nha! Đang rảnh rỗi thế này hay là vào Liên Quân làm vài ván rank với Lan Anh đi!"
+            "Chào bạn thân của Lan Anh nha! Hôm nay có chuyện gì vui muốn kể cho mình nghe không?"
           </p>
           <div class="voice-wave-bars" id="voice-wave">
             <span class="bar"></span>
@@ -119,7 +154,7 @@
         <button class="quick-chip" data-prompt="Xoa đầu Lan Anh nè 🌸">
           ✋ Xoa đầu Lan Anh
         </button>
-        <button class="quick-chip" data-prompt="Vào Liên Quân làm trận rank đi Lan Anh! 🎮">
+        <button class="quick-chip" data-prompt="Vào Liên Quân làm vài ván rank với Lan Anh đi! 🎮">
           🎮 Rủ chơi Liên Quân
         </button>
         <button class="quick-chip" data-prompt="Bạn còn nhớ hồi lớp 8 hai đứa ngồi chung bàn không? 🎧">
@@ -137,7 +172,7 @@
       </div>
 
       <!-- Input Bar with Voice (STT) and Send -->
-      <div class="chat-input-wrapper">
+      <div class="chat-input-wrapper polaroid-card">
         <button class="btn-action-voice" id="btn-mic" title="Nói chuyện qua Micro (Voice STT)">
           <span class="mic-icon">🎙️</span>
         </button>
@@ -145,7 +180,7 @@
           type="text" 
           id="chat-input" 
           class="chat-input" 
-          placeholder="Nói gì đó với Lan Anh (Liên Quân, kỷ niệm lớp 8/lớp 10, khen xinh...)..."
+          placeholder="Nhắn tin với Lan Anh (Liên Quân, kỷ niệm lớp 8/lớp 10, chuyện trò tuổi 20)..."
           autocomplete="off"
         >
         <button class="btn-send" id="btn-send" title="Gửi lời nhắn">
@@ -160,7 +195,7 @@
 
   <!-- 1. Ký ức 7 năm Modal -->
   <div class="modal-overlay" id="modal-memory">
-    <div class="modal-glass-card">
+    <div class="modal-glass-card polaroid-frame">
       <div class="modal-header">
         <h2>📖 Nhật Ký 7 Năm Tri Kỷ (2019 - 2026)</h2>
         <button class="btn-close-modal" data-close="modal-memory">✕</button>
@@ -173,7 +208,7 @@
 
   <!-- 2. Liên Quân Mobile Companion Panel -->
   <div class="modal-overlay" id="modal-gaming">
-    <div class="modal-glass-card">
+    <div class="modal-glass-card polaroid-frame">
       <div class="modal-header">
         <h2>🎮 Phòng Duo Liên Quân Mobile - Lan Anh</h2>
         <button class="btn-close-modal" data-close="modal-gaming">✕</button>
@@ -221,7 +256,7 @@
 
   <!-- 3. Model & Trang phục Modal -->
   <div class="modal-overlay" id="modal-models">
-    <div class="modal-glass-card">
+    <div class="modal-glass-card polaroid-frame">
       <div class="modal-header">
         <h2>👗 Chọn Diện Mạo Lan Anh</h2>
         <button class="btn-close-modal" data-close="modal-models">✕</button>
@@ -231,7 +266,7 @@
           <img src="assets/lan_anh_model/base.png" alt="Lan Anh Origin VTuber Model">
           <div class="model-info">
             <h4>Váy Voan Nàng Thơ Tuổi 20</h4>
-            <p>Dựa trên ảnh sinh nhật gốc <code>Lan Anh origin.jpg</code></p>
+            <p>Khởi tạo từ ảnh sinh nhật gốc <code>Lan Anh origin.jpg</code></p>
             <span class="active-badge">Đang dùng</span>
           </div>
         </div>
@@ -245,7 +280,7 @@
         <div class="model-card" data-model="real-origin">
           <img src="assets/origin.jpg" alt="Ảnh gốc Lan Anh">
           <div class="model-info">
-            <h4>Bức Ảnh Gốc Gốc (Original Photo)</h4>
+            <h4>Bức Ảnh Gốc (Origin Photo)</h4>
             <p>File gốc <code>Lan Anh origin.jpg</code> trong D:\Her</p>
           </div>
         </div>
@@ -255,16 +290,16 @@
 
   <!-- 4. Cài đặt & API Key Modal -->
   <div class="modal-overlay" id="modal-settings">
-    <div class="modal-glass-card">
+    <div class="modal-glass-card polaroid-frame">
       <div class="modal-header">
-        <h2>⚙️ Cài Đặt Hệ Thống VTuber Lan Anh</h2>
+        <h2>⚙️ Cài Đặt Hệ Thống Chấp Niệm</h2>
         <button class="btn-close-modal" data-close="modal-settings">✕</button>
       </div>
       <div class="modal-body">
         <div class="setting-group">
           <label for="input-api-key">Gemini API Key (Tùy chọn - Nâng cao):</label>
           <input type="password" id="input-api-key" placeholder="Nhập Google Gemini API Key của bạn...">
-          <small>Nếu để trống, hệ thống sẽ sử dụng <strong>Offline Contextual Cognitive Engine</strong> được tinh chỉnh sẵn theo đúng ký ức và tính cách Lan Anh.</small>
+          <small>Nếu để trống, hệ thống sẽ sử dụng <strong>Offline Contextual Engine</strong> được tinh chỉnh sẵn theo đúng ký ức và tính cách Lan Anh.</small>
         </div>
 
         <div class="setting-group">

@@ -1,20 +1,28 @@
 {
-  "name": "her-lan-anh-vtuber",
+  "name": "chap-niem-lan-anh",
   "version": "1.0.0",
-  "description": "Interactive VTuber AI Companion - Lan Anh",
+  "description": "Chấp Niệm - Không gian tương tác VTuber AI Lan Anh (Ký ức tuổi 20)",
   "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "tunnel": "node scripts/tunnel.js"
   },
-  "keywords": ["vtuber", "ai-companion", "live2d", "lip-sync", "lan-anh"],
+  "keywords": [
+    "chap-niem",
+    "vtuber",
+    "ai-companion",
+    "lan-anh",
+    "live2d",
+    "lip-sync"
+  ],
   "author": "Quang Anh",
   "license": "MIT",
   "dependencies": {
-    "@google/genai": "^0.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "localtunnel": "^2.0.2"
   }
 }

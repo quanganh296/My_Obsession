@@ -1,7 +1,7 @@
 /**
- * Lan Anh VTuber 2.5D Interactive Engine
+ * Chấp Niệm - Lan Anh VTuber 2.5D Interactive Engine
  * Handles Live Rigging, Idle Breathing, Procedural Eye Blinking,
- * Mouse Parallax Tracking, Web Audio Lip-Sync, and Dynamic Particle Auras.
+ * Mouse Parallax Tracking, Web Audio Lip-Sync, and Ambient Floral Particles.
  */
 
 class VTuberEngine {
@@ -44,7 +44,6 @@ class VTuberEngine {
     // Expressions & Emotions
     this.currentEmotion = 'happy';
     this.targetEmotion = 'happy';
-    this.emotionAlpha = 1.0;
 
     // Voice & Lip-Sync (Web Audio API)
     this.audioContext = null;
@@ -54,9 +53,9 @@ class VTuberEngine {
     this.speechAmplitude = 0;
     this.speechBounce = 0;
 
-    // Particles system
+    // Ambient Floral Particles (Cánh hoa trắng nhỏ, cúc họa mi, đốm sáng vàng kem)
     this.particles = [];
-    this.maxParticles = 35;
+    this.maxParticles = 40;
 
     this.init();
   }
@@ -68,7 +67,7 @@ class VTuberEngine {
     await this.loadSprites();
     this.bindMouseTracking();
     this.bindHitboxes();
-    this.initParticles();
+    this.initFloralParticles();
 
     // Start Main Render Loops
     requestAnimationFrame((ts) => this.renderLoop(ts));
@@ -123,10 +122,10 @@ class VTuberEngine {
       this.sprites[k] = results[idx];
     });
 
-    // Cập nhật mini avatar trên header
+    // Cập nhật mini avatar trên header nếu có
     const headerAvatar = document.getElementById('header-mini-avatar');
     if (headerAvatar && this.sprites.base) {
-      headerAvatar.src = this.sprites.base.src;
+      headerAvatar.src = 'favicon.png';
     }
   }
 
@@ -139,7 +138,7 @@ class VTuberEngine {
   }
 
   /**
-   * Lắng nghe di chuột để điều khiển ánh mắt và nghiêng đầu
+   * Lắng nghe di chuột để điều khiển ánh mắt, góc nghiêng đầu và gió thổi hạt hoa
    */
   bindMouseTracking() {
     window.addEventListener('mousemove', (e) => {
@@ -153,6 +152,22 @@ class VTuberEngine {
       // Giới hạn góc nghiêng tự nhiên
       this.targetMouse.x = Math.max(-1, Math.min(1, dx));
       this.targetMouse.y = Math.max(-1, Math.min(1, dy));
+    });
+
+    // Touch event cho mobile
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        const rect = this.canvas.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height * 0.35;
+
+        const dx = (touch.clientX - centerX) / (window.innerWidth / 2);
+        const dy = (touch.clientY - centerY) / (window.innerHeight / 2);
+
+        this.targetMouse.x = Math.max(-1, Math.min(1, dx));
+        this.targetMouse.y = Math.max(-1, Math.min(1, dy));
+      }
     });
 
     window.addEventListener('mouseleave', () => {
@@ -212,50 +227,28 @@ class VTuberEngine {
   }
 
   /**
-   * Khởi tạo Web Audio Analyser cho Lip-Sync
-   */
-  setupAudioAnalyser(audioElement) {
-    try {
-      if (!this.audioContext) {
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        this.analyser = this.audioContext.createAnalyser();
-        this.analyser.fftSize = 256;
-        this.audioData = new Uint8Array(this.analyser.frequencyBinCount);
-      }
-
-      const source = this.audioContext.createMediaElementSource(audioElement);
-      source.connect(this.analyser);
-      this.analyser.connect(this.audioContext.destination);
-    } catch (e) {
-      console.warn('Audio Context init notice:', e.message);
-    }
-  }
-
-  /**
-   * Bắt đầu hoặc dừng trạng thái nói chuyện
+   * Bắt đầu hoặc dừng trạng thái nói chuyện (Lip-Sync)
    */
   setSpeaking(speaking, customAmplitude = 0) {
     this.isSpeaking = speaking;
+    const wave = document.getElementById('voice-wave');
     if (!speaking) {
       this.speechAmplitude = 0;
       this.speechBounce = 0;
-      const wave = document.getElementById('voice-wave');
       if (wave) wave.classList.remove('active');
     } else {
-      this.speechAmplitude = customAmplitude;
-      const wave = document.getElementById('voice-wave');
+      this.speechAmplitude = customAmplitude || 0.6;
       if (wave) wave.classList.add('active');
     }
   }
 
   /**
-   * Đổi biểu cảm và hiệu ứng hạt aura
+   * Đổi biểu cảm
    */
   setEmotion(emotion) {
     this.currentEmotion = emotion;
     this.targetEmotion = emotion;
 
-    // Reset hoặc điều chỉnh hạt aura
     if (emotion === 'shy') {
       this.spawnHeartBurst();
     } else if (emotion === 'excited_gaming') {
@@ -264,7 +257,7 @@ class VTuberEngine {
   }
 
   /**
-   * Main VTuber 2.5D Canvas Render Loop
+   * Main Render Loop
    */
   renderLoop(timestamp) {
     this.time = timestamp;
@@ -308,20 +301,10 @@ class VTuberEngine {
     // 3. Chuột tracking và độ nghiêng đầu (Lerp Smoothing)
     this.currentMouse.x += (this.targetMouse.x - this.currentMouse.x) * 0.07;
     this.currentMouse.y += (this.targetMouse.y - this.currentMouse.y) * 0.07;
-    this.headAngle = this.currentMouse.x * 0.08; // Radian nghiêng đầu
+    this.headAngle = this.currentMouse.x * 0.08;
 
-    // 4. Phân tích âm thanh Lip-Sync (Web Audio API)
-    if (this.analyser && this.isSpeaking) {
-      this.analyser.getByteFrequencyData(this.audioData);
-      let sum = 0;
-      for (let i = 0; i < this.audioData.length; i++) {
-        sum += this.audioData[i];
-      }
-      const avg = sum / this.audioData.length;
-      this.speechAmplitude = Math.min(1.0, avg / 75.0);
-      this.speechBounce = Math.sin(this.time * 0.02) * (this.speechAmplitude * 4);
-    } else if (this.isSpeaking) {
-      // Procedural synthetic speech modulation
+    // 4. Phân tích âm thanh Lip-Sync
+    if (this.isSpeaking) {
       this.speechAmplitude = 0.5 + Math.sin(this.time * 0.025) * 0.5;
       this.speechBounce = Math.sin(this.time * 0.02) * 3;
     } else {
@@ -337,7 +320,7 @@ class VTuberEngine {
   }
 
   /**
-   * Vẽ nhân vật lên Canvas với các tầng layer biểu cảm
+   * Vẽ nhân vật lên Canvas
    */
   drawCharacter() {
     const { ctx, canvas } = this;
@@ -363,17 +346,14 @@ class VTuberEngine {
       return;
     }
 
-    // Xác định Sprite chính để hiển thị theo Biểu Cảm & Lip-Sync
+    // Xác định Sprite chính
     let activeSprite = this.sprites.base;
 
-    // Khi đang nói và âm lượng lớn -> dùng sprite excited / khẩu hình mở
     if (this.isSpeaking && this.speechAmplitude > 0.35 && this.sprites.excited) {
       activeSprite = this.sprites.excited;
     } else if (this.isBlinking && this.sprites.blink) {
-      // Khi đang chớp mắt
       activeSprite = this.sprites.blink;
     } else {
-      // Theo cảm xúc
       switch (this.currentEmotion) {
         case 'shy':
           activeSprite = this.sprites.shy || this.sprites.base;
@@ -393,39 +373,33 @@ class VTuberEngine {
 
     ctx.save();
 
-    // Tọa độ gốc xoay/nghiêng ở vị trí ngực/cổ nhân vật
     const pivotX = cw / 2;
     const pivotY = ch * 0.65;
 
     ctx.translate(pivotX, pivotY);
 
-    // Chuyển động Parallax chuột
     const parallaxX = this.currentMouse.x * 16;
     const parallaxY = this.currentMouse.y * 10;
     ctx.translate(parallaxX, parallaxY + this.currentBreath.offsetY);
 
-    // Xoay nhẹ đầu theo chuột
     ctx.rotate(this.headAngle);
-
-    // Tỉ lệ thở (Breathing Scale)
     ctx.scale(this.currentBreath.scaleX, this.currentBreath.scaleY);
 
-    // Tóc đung đưa nhẹ theo chu kỳ thở (Sinusoidal sway)
+    // Tóc đung đưa nhẹ
     const hairSway = Math.sin(this.time * 0.002) * 0.012;
     ctx.rotate(hairSway);
 
-    // Vẽ hình ảnh nhân vật căn giữa
     const imgW = cw * 0.95;
     const imgH = ch * 0.95;
     ctx.drawImage(activeSprite, -imgW / 2, -imgH + (ch * 0.35), imgW, imgH);
 
-    // Tầng hiệu ứng đỏ mặt bổ sung khi đang shy
+    // Tầng ửng hồng khi shy
     if (this.currentEmotion === 'shy') {
       ctx.save();
-      ctx.fillStyle = 'rgba(244, 114, 182, 0.16)';
+      ctx.fillStyle = 'rgba(232, 153, 141, 0.22)';
       ctx.beginPath();
-      ctx.ellipse(-55, -280, 40, 18, 0, 0, Math.PI * 2);
-      ctx.ellipse(55, -280, 40, 18, 0, 0, Math.PI * 2);
+      ctx.ellipse(-55, -280, 42, 18, 0, 0, Math.PI * 2);
+      ctx.ellipse(55, -280, 42, 18, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
@@ -434,47 +408,35 @@ class VTuberEngine {
   }
 
   /**
-   * Hệ thống Aura Hạt Hiệu Ứng (Dynamic Particle Aura)
+   * Ambient Floral Particles (Cánh hoa trắng nhỏ, cúc họa mi, đốm sáng vàng kem #FFF6D6)
    */
-  initParticles() {
+  initFloralParticles() {
     this.particles = [];
     for (let i = 0; i < this.maxParticles; i++) {
-      this.particles.push(this.createParticle());
+      this.particles.push(this.createFloralParticle());
     }
   }
 
-  createParticle() {
+  createFloralParticle() {
+    const types = ['white_petal', 'chamomile', 'golden_speck', 'peach_petal'];
+    const chosenType = types[Math.floor(Math.random() * types.length)];
+
     return {
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: this.randomBetween(8, 18),
-      speedY: this.randomBetween(0.4, 1.2),
-      speedX: this.randomBetween(-0.5, 0.5),
+      size: this.randomBetween(6, 16),
+      speedY: this.randomBetween(0.35, 1.1),
+      speedX: this.randomBetween(-0.4, 0.4),
       rotation: Math.random() * 360,
-      rotationSpeed: this.randomBetween(-1.5, 1.5),
-      opacity: this.randomBetween(0.2, 0.7),
-      type: this.getParticleTypeForEmotion()
+      rotationSpeed: this.randomBetween(-1.2, 1.2),
+      opacity: this.randomBetween(0.35, 0.8),
+      type: chosenType
     };
   }
 
-  getParticleTypeForEmotion() {
-    switch (this.currentEmotion) {
-      case 'shy':
-        return 'heart';
-      case 'excited_gaming':
-        return Math.random() > 0.5 ? 'spark' : 'star';
-      case 'pout':
-        return 'steam';
-      case 'nostalgic':
-        return 'petal';
-      default:
-        return Math.random() > 0.4 ? 'petal' : 'star';
-    }
-  }
-
   spawnHeartBurst() {
-    for (let i = 0; i < 15; i++) {
-      const p = this.createParticle();
+    for (let i = 0; i < 16; i++) {
+      const p = this.createFloralParticle();
       p.x = window.innerWidth / 2 + this.randomBetween(-120, 120);
       p.y = window.innerHeight * 0.45 + this.randomBetween(-40, 40);
       p.speedY = this.randomBetween(-2.5, -0.8);
@@ -487,7 +449,7 @@ class VTuberEngine {
 
   spawnPoutSteam() {
     for (let i = 0; i < 8; i++) {
-      const p = this.createParticle();
+      const p = this.createFloralParticle();
       p.x = window.innerWidth / 2 + (Math.random() > 0.5 ? 90 : -90);
       p.y = window.innerHeight * 0.4;
       p.speedY = -1.2;
@@ -500,7 +462,7 @@ class VTuberEngine {
 
   spawnGamingSparks() {
     for (let i = 0; i < 15; i++) {
-      const p = this.createParticle();
+      const p = this.createFloralParticle();
       p.x = window.innerWidth / 2 + this.randomBetween(-150, 150);
       p.y = window.innerHeight * 0.5 + this.randomBetween(-150, 150);
       p.speedY = this.randomBetween(-2, 2);
@@ -515,48 +477,73 @@ class VTuberEngine {
     const { pCtx, pCanvas } = this;
     pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
 
+    const windX = this.currentMouse.x * 0.8;
+
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
       p.y += p.speedY;
-      p.x += p.speedX;
+      p.x += p.speedX + windX;
       p.rotation += p.rotationSpeed;
 
-      // Vẽ hạt theo loại
       pCtx.save();
       pCtx.translate(p.x, p.y);
       pCtx.rotate((p.rotation * Math.PI) / 180);
       pCtx.globalAlpha = p.opacity;
 
-      if (p.type === 'heart') {
-        pCtx.fillStyle = '#f472b6';
-        pCtx.font = `${p.size}px serif`;
-        pCtx.fillText('💖', -p.size / 2, p.size / 2);
-      } else if (p.type === 'star') {
-        pCtx.fillStyle = '#fbbf24';
-        pCtx.font = `${p.size}px serif`;
-        pCtx.fillText('✨', -p.size / 2, p.size / 2);
-      } else if (p.type === 'petal') {
-        pCtx.fillStyle = 'rgba(251, 207, 232, 0.75)';
+      if (p.type === 'white_petal') {
+        // Cánh hoa trắng nhỏ
+        pCtx.fillStyle = '#FFFFFF';
         pCtx.beginPath();
-        pCtx.ellipse(0, 0, p.size, p.size * 0.45, 0, 0, Math.PI * 2);
+        pCtx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
         pCtx.fill();
+      } else if (p.type === 'peach_petal') {
+        // Cánh hoa hồng đào phấn #E8998D
+        pCtx.fillStyle = 'rgba(232, 153, 141, 0.85)';
+        pCtx.beginPath();
+        pCtx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
+        pCtx.fill();
+      } else if (p.type === 'chamomile') {
+        // Hoa cúc họa mi / floret
+        pCtx.fillStyle = '#FFFDF7';
+        for (let a = 0; a < 6; a++) {
+          pCtx.rotate(Math.PI / 3);
+          pCtx.beginPath();
+          pCtx.ellipse(p.size * 0.4, 0, p.size * 0.4, p.size * 0.18, 0, 0, Math.PI * 2);
+          pCtx.fill();
+        }
+        // Nhụy vàng cam ấm
+        pCtx.fillStyle = '#D97F43';
+        pCtx.beginPath();
+        pCtx.arc(0, 0, p.size * 0.22, 0, Math.PI * 2);
+        pCtx.fill();
+      } else if (p.type === 'golden_speck') {
+        // Đốm sáng vàng kem #FFF6D6
+        pCtx.fillStyle = '#FFF6D6';
+        pCtx.shadowColor = '#F5DEAA';
+        pCtx.shadowBlur = 8;
+        pCtx.beginPath();
+        pCtx.arc(0, 0, p.size * 0.35, 0, Math.PI * 2);
+        pCtx.fill();
+      } else if (p.type === 'heart') {
+        pCtx.fillStyle = '#E8998D';
+        pCtx.font = `${p.size}px serif`;
+        pCtx.fillText('💕', -p.size / 2, p.size / 2);
       } else if (p.type === 'steam') {
         pCtx.fillStyle = 'rgba(255, 255, 255, 0.6)';
         pCtx.font = `${p.size}px serif`;
         pCtx.fillText('♨️', -p.size / 2, p.size / 2);
       } else if (p.type === 'spark') {
-        pCtx.fillStyle = '#38bdf8';
+        pCtx.fillStyle = '#D97F43';
         pCtx.font = `${p.size}px serif`;
-        pCtx.fillText('⚡', -p.size / 2, p.size / 2);
+        pCtx.fillText('✨', -p.size / 2, p.size / 2);
       }
 
       pCtx.restore();
 
-      // Reset nếu trôi khỏi màn hình
-      if (p.y > pCanvas.height + 40 || p.y < -40) {
-        p.y = p.speedY > 0 ? -20 : pCanvas.height + 20;
+      // Reset khi trôi khỏi màn hình
+      if (p.y > pCanvas.height + 30 || p.y < -30) {
+        p.y = -20;
         p.x = Math.random() * pCanvas.width;
-        p.type = this.getParticleTypeForEmotion();
       }
     }
 

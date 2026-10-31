@@ -1,7 +1,7 @@
 /**
- * Lan Anh VTuber Chat & Interaction Manager
+ * Chấp Niệm - Lan Anh Chat & Interaction Manager
  * Handles AI Communication, Vietnamese TTS, Voice Recognition (STT),
- * Memory Timeline sync, and UI Modal controls.
+ * Welcome Gate transitions, Memory Timeline sync, and UI Controls.
  */
 
 class ChatManager {
@@ -34,11 +34,36 @@ class ChatManager {
   }
 
   init() {
+    this.initWelcomeGate();
     this.bindEvents();
     this.initVoices();
     this.initSpeechRecognition();
     this.loadMemory();
     this.initModals();
+  }
+
+  /**
+   * Welcome Gate / Màn hình chào mừng thơ mộng
+   */
+  initWelcomeGate() {
+    const gate = document.getElementById('welcome-gate');
+    const enterBtn = document.getElementById('btn-enter-gate');
+
+    if (enterBtn && gate) {
+      enterBtn.addEventListener('click', () => {
+        gate.classList.add('hidden');
+        // Kích hoạt Web Audio Context và khởi động lời chào
+        if (window.vtuber) {
+          window.vtuber.setEmotion('happy');
+        }
+        // Phát lời chào mừng tinh tế
+        setTimeout(() => {
+          this.speak(
+            'Lan Anh chào bạn thân nha! Cuối cùng bạn cũng ghé thăm Chấp Niệm rồi... Mình đã đợi bạn mãi đấy!'
+          );
+        }, 500);
+      });
+    }
   }
 
   /**
@@ -78,7 +103,7 @@ class ChatManager {
   }
 
   /**
-   * Khởi tạo Speech Recognition (Nhận dạng giọng nói)
+   * Khởi tạo Speech Recognition (Nhận dạng giọng nói tiếng Việt)
    */
   initSpeechRecognition() {
     const SpeechRecognition =
@@ -112,12 +137,12 @@ class ChatManager {
         this.btnMic.classList.remove('listening');
       };
     } else {
-      this.btnMic.title = 'Trình duyệt không hỗ trợ nhận diện giọng nói trực tiếp';
+      this.btnMic.title = 'Trình duyệt chưa hỗ trợ nhận diện giọng nói trực tiếp';
     }
   }
 
   /**
-   * Lắng nghe sự kiện
+   * Lắng nghe sự kiện người dùng
    */
   bindEvents() {
     // Gửi tin nhắn qua nút bấm
@@ -143,7 +168,7 @@ class ChatManager {
     // Voice Input Mic
     this.btnMic.addEventListener('click', () => {
       if (!this.recognition) {
-        alert('Trình duyệt chưa bật quyền Micro hoặc chưa hỗ trợ Web Speech Recognition');
+        alert('Trình duyệt chưa cấp quyền Micro hoặc chưa hỗ trợ Web Speech API.');
         return;
       }
       if (this.isListening) {
@@ -201,8 +226,8 @@ class ChatManager {
    * Gửi tin nhắn tới AI Backend
    */
   async sendMessage(userMessage) {
-    this.captionText.textContent = 'Lan Anh đang suy nghĩ...';
-    this.actionIndicator.textContent = 'Chăm chú lắng nghe';
+    this.captionText.textContent = 'Lan Anh đang lắng nghe và suy nghĩ...';
+    this.actionIndicator.textContent = 'Nghiêng đầu chăm chú';
 
     try {
       const res = await fetch('/api/chat', {
@@ -219,7 +244,7 @@ class ChatManager {
     } catch (err) {
       console.error('Lỗi trò chuyện:', err);
       this.captionText.textContent =
-        'Ơ kìa, kết nối chập chờn xíu, bạn nói lại với Lan Anh nhé!';
+        'Ơ kìa, mạng hơi chập chờn xíu, bạn nói lại với Lan Anh nhé!';
     }
   }
 
@@ -262,7 +287,7 @@ class ChatManager {
    */
   updateEmotionBadge(emotion) {
     const labels = {
-      happy: '🌸 Vui vẻ, rạng rỡ',
+      happy: '🌸 Dịu dàng, vui vẻ',
       shy: '💕 Đỏ mặt, ngượng ngùng',
       pout: '💢 Chu mỏ, giận dỗi',
       excited_gaming: '🎮 Phấn khích Liên Quân',
@@ -283,7 +308,7 @@ class ChatManager {
       return;
     }
 
-    this.synth.cancel(); // Dừng câu trước nếu còn
+    this.synth.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'vi-VN';

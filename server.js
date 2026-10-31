@@ -104,11 +104,17 @@ app.post('/api/config', (req, res) => {
   }
 });
 
-// Khởi chạy Server
-app.listen(PORT, () => {
+// Health Check endpoint cho Cloud Deployment (Railway / Render / Docker)
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', service: 'Chap Niem - Lan Anh', timestamp: new Date().toISOString() });
+});
+
+// Khởi chạy Server lắng nghe 0.0.0.0 để tiếp nhận truy cập từ Cloud & Public Tunnel
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`=======================================================`);
-  console.log(`🌸 Lan Anh VTuber AI Companion Server is running!`);
-  console.log(`🌐 Truy cập giao diện: http://localhost:${PORT}`);
-  console.log(`📂 Thư mục làm việc: ${__dirname}`);
+  console.log(`🌸 Chấp Niệm - Lan Anh VTuber AI Companion Server is running!`);
+  console.log(`🌐 Local URL: http://localhost:${PORT}`);
+  console.log(`📂 Working Directory: ${__dirname}`);
   console.log(`=======================================================`);
 });
+

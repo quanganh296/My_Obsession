@@ -33,7 +33,7 @@
       "user_name": "Bạn thân",
       "known_since": 2019,
       "years_known": 7,
-      "intimacy_level": 86,
+      "intimacy_level": 87,
       "special_bonds": [
         "Học chung lớp và chơi thân vào năm lớp 8 (2019) tại trường cấp 2",
         "Học chung lớp 10 (2021-2022) tại trường cấp 3",
@@ -81,6 +81,17 @@
   "conversation_history": [
     {
       "timestamp": "2026-10-31T12:38:45.091Z",
+      "user": "Xoa đầu Lan Anh nè 🌸",
+      "lan_anh": {
+        "thought": "Tự dưng khen làm tim mình đập thình thịch luôn á... Bọn mình là bạn thân 7 năm mà nói mấy câu này ngại chết mất >///<",
+        "emotion": "shy",
+        "animation_trigger": "blush",
+        "action": "Hai má ửng hồng đỏ rực, tay đưa lên vén lọn tóc mai gượng gạo, mắt nhìn sang hướng khác",
+        "reply": "Gì... gì vậy tự nhiên lại khen mình thế... Làm người ta đỏ hết cả mặt rồi này! Có phải bạn lại muốn nhờ Lan Anh gánh rank hay bao trà sữa nữa đúng không, đồ đáng ghét >///<"
+      }
+    },
+    {
+      "timestamp": "2026-10-31T13:55:59.672Z",
       "user": "Xoa đầu Lan Anh nè 🌸",
       "lan_anh": {
         "thought": "Tự dưng khen làm tim mình đập thình thịch luôn á... Bọn mình là bạn thân 7 năm mà nói mấy câu này ngại chết mất >///<",
